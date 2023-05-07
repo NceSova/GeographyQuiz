@@ -12,20 +12,33 @@ class MainActivity : AppCompatActivity() {
 
     private var currentQuestionIndex = 0
     private val userAnswers = IntArray(5)
-    private val questions = arrayOf(
+    private val questionsArray = arrayOf(
+        Question(
         "В каких регионах чаще всего встречаются сейсмоопасные районы?",
-        "Какой из перечисленных островов находится в экваториальном климатическом поясе?",
-        "Какую карту открыть, чтобы увидеть центры машиностроения в России?",
-        "Какое из перечисленных озёр относится к числу глубочайших?",
-        "Самая глубокая впадина на суше находится на материке"
+        "Районы вазимодействия литосферных плит", "Общирные восточные морские побережья", "Степи, полупустыни, пустыни",
+        0),
+        Question(
+            "Какой из перечисленных островов находится в экваториальном климатическом поясе?",
+            "Мадагаскар", "Калимантан", "Куба",
+            1
+        ),
+        Question(
+            "Какую карту открыть, чтобы увидеть центры машиностроения в России?",
+            "Политическую карту", "Карту 'Машиностроение в России'", "Экономическую карту Росcии",
+            2
+        ),
+        Question(
+            "Какое из перечисленных озёр относится к числу глубочайших?",
+            "Танганьика", "Чад", "Ладожское",
+            0
+        ),
+        Question(
+            "Самая глубокая впадина на суше находится на материке",
+            "Австралия", "Евразия", "Северная Америка",
+            1
+        )
     )
-    private val answers = arrayOf(
-        arrayOf("Районы вазимодействия литосферных плит", "Общирные восточные морские побережья", "Степи, полупустыни, пустыни"),
-        arrayOf("Мадагаскар", "Калимантан", "Куба"),
-        arrayOf("Политическую карту", "Карту 'Машиностроение в России'", "Экономическую карту Росии"),
-        arrayOf("Танганьика", "Чад", "Ладожское"),
-        arrayOf("Австралия", "Евразия", "Северная Америка")
-    )
+
     private val correctAnswers = intArrayOf(0, 1, 2, 0, 1)
 
     private lateinit var questionText: TextView
@@ -49,7 +62,7 @@ class MainActivity : AppCompatActivity() {
             val selectedAnswerIndex = answersGroup.indexOfChild(findViewById(answersGroup.checkedRadioButtonId))
             userAnswers[currentQuestionIndex] = selectedAnswerIndex
             currentQuestionIndex++
-            if (currentQuestionIndex < questions.size) {
+            if (currentQuestionIndex < questionsArray.size) {
                 updateQuestion()
             } else {
                 showResults()
@@ -60,10 +73,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateQuestion() {
-        questionText.text = questions[currentQuestionIndex]
-        answer1.text = answers[currentQuestionIndex][0]
-        answer2.text = answers[currentQuestionIndex][1]
-        answer3.text = answers[currentQuestionIndex][2]
+        questionText.text = questionsArray[currentQuestionIndex].text
+        answer1.text = questionsArray[currentQuestionIndex].answer1
+        answer2.text = questionsArray[currentQuestionIndex].answer2
+        answer3.text = questionsArray[currentQuestionIndex].answer3
         answersGroup.clearCheck()
     }
 
