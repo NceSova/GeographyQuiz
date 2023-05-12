@@ -21,7 +21,9 @@ class ResultActivity : AppCompatActivity() {
             }
         }
 
-        val result = "Ваш результат: $correctCount из ${correctAnswers.size}"
+        val result =
+            """Ваш результат:
+            | $correctCount из ${correctAnswers.size}""".trimMargin()
         resultText.text = result
     }
 }

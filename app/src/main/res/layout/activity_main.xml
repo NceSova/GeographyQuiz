@@ -10,7 +10,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="25dp"
-        android:text="Вопрос 1" />
+        android:text="Вопрос 1"
+        android:paddingBottom="10dp"/>
 
     <ImageView
         android:id="@+id/imageView"
@@ -23,7 +24,8 @@
     <RadioGroup
         android:id="@+id/answers_group"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:padding="10dp">
 
         <RadioButton
             android:id="@+id/answer_1"
@@ -51,6 +53,7 @@
         android:id="@+id/next_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Следующий вопрос" />
+        android:text="Следующий вопрос"
+        android:textSize="20dp"/>
 
 </LinearLayout>
