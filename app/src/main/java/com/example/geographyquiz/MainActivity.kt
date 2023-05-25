@@ -2,48 +2,26 @@ package com.example.geographyquiz
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import java.io.IOException
+
 
 class MainActivity : AppCompatActivity() {
 
     private var currentQuestionIndex = 0
     private val userAnswers = IntArray(5)
-    private val questionsArray = arrayOf(
-        Question(
-        "В каких регионах чаще всего встречаются сейсмоопасные районы?",
-            R.drawable.earthquakes,
-        "Районы вазимодействия литосферных плит", "Общирные восточные морские побережья", "Степи, полупустыни, пустыни",
-        0),
-        Question(
-            "Какой из перечисленных островов находится в экваториальном климатическом поясе?",
-            R.drawable.islands,
-            "Мадагаскар", "Калимантан", "Куба",
-            1
-        ),
-        Question(
-            "Какую карту открыть, чтобы увидеть центры машиностроения в России?",
-            R.drawable.maps,
-            "Политическую карту", "Карту 'Машиностроение в России'", "Экономическую карту Росcии",
-            2
-        ),
-        Question(
-            "Какое из перечисленных озёр относится к числу глубочайших?",
-            R.drawable.lake,
-            "Танганьика", "Чад", "Ладожское",
-            0
-        ),
-        Question(
-            "Самая глубокая впадина на суше находится на материке",
-            R.drawable.soil,
-            "Австралия", "Евразия", "Северная Америка",
-            1
-        )
-    )
+
 
     private val correctAnswers = intArrayOf(0, 1, 2, 0, 1)
 
@@ -53,10 +31,14 @@ class MainActivity : AppCompatActivity() {
     private lateinit var answer1: RadioButton
     private lateinit var answer2: RadioButton
     private lateinit var answer3: RadioButton
+    var text = "nothing"
+    var questions = mutableListOf<Question>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        text = intent.getStringExtra("json").toString()
 
         questionText = findViewById(R.id.question_text)
         imageView = findViewById(R.id.imageView)
@@ -65,12 +47,21 @@ class MainActivity : AppCompatActivity() {
         answer2 = findViewById(R.id.answer_2)
         answer3 = findViewById(R.id.answer_3)
 
+            val gson = Gson()
+            val listType = object : TypeToken<List<Question>>() {}.type
+            val listofquest = gson.fromJson<List<Question>>(text, listType)
+            Log.e("DONE", "Done")
+            questions = listofquest.toMutableList()
+            Log.e("Done", questions[1].text)
+
+
         val nextButton = findViewById<Button>(R.id.next_button)
         nextButton.setOnClickListener {
-            val selectedAnswerIndex = answersGroup.indexOfChild(findViewById(answersGroup.checkedRadioButtonId))
+            val selectedAnswerIndex =
+                answersGroup.indexOfChild(findViewById(answersGroup.checkedRadioButtonId))
             userAnswers[currentQuestionIndex] = selectedAnswerIndex
             currentQuestionIndex++
-            if (currentQuestionIndex < questionsArray.size) {
+            if (currentQuestionIndex < questions.size) {
                 updateQuestion()
             } else {
                 showResults()
@@ -81,11 +72,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateQuestion() {
-        questionText.text = questionsArray[currentQuestionIndex].text
-        imageView.setImageResource(questionsArray[currentQuestionIndex].resource)
-        answer1.text = questionsArray[currentQuestionIndex].answer1
-        answer2.text = questionsArray[currentQuestionIndex].answer2
-        answer3.text = questionsArray[currentQuestionIndex].answer3
+        questionText.text = questions[currentQuestionIndex].text
+//        imageView.setImageResource(questionsArray[currentQuestionIndex].resource)
+        answer1.text = questions[currentQuestionIndex].answer1
+        answer2.text = questions[currentQuestionIndex].answer2
+        answer3.text = questions[currentQuestionIndex].answer3
         answersGroup.clearCheck()
     }
 
